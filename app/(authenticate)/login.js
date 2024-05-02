@@ -143,6 +143,7 @@ const login = () => {
             </Text>
           </Pressable>
         </View>
+        
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

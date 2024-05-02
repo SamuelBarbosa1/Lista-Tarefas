@@ -126,7 +126,7 @@ const register = () => {
           </Pressable>
 
           <Pressable onPress={() => router.replace("/login")} style={{ marginTop: 15 }}>
-            <Text style={{ textAlign: "center", fontSize: 15, color: "black" }}>
+            <Text style={{ textAlign: "center", fontSize: 15, color: "black" }}> 
               Já tem uma nova conta? Registre-se
             </Text>
           </Pressable>

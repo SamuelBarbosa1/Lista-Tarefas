@@ -69,7 +69,16 @@ const index = () => {
           {todos.length > 0 ? (
             <View></View>
           ) : (
-            <View style={{flex:1,justifyContent:"center",alignItems:"center",marginTop:130,marginLeft:"auto",marginRight:"auto"}}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: 130,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
               <Image
                 style={{ width: 200, height: 200, resizeMode: "contain" }}
                 source={{
@@ -86,7 +95,7 @@ const index = () => {
               >
                 Sem Tarefas para hoje! adicione uma nova tarefa
               </Text>
-              <Pressable style={{marginTop:15}}>
+              <Pressable style={{ marginTop: 15 }}>
                 <AntDesign name="pluscircle" size={30} color="#736bff" />
               </Pressable>
             </View>
