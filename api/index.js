@@ -11,6 +11,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+const jtw = require("jsonwebtoken");
+
 mongoose
   .connect("mongodb+srv://samuel:trav1234@todo-list.t0g5cjx.mongodb.net/")
   .then(() => {
@@ -30,10 +32,10 @@ app.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    ///Verifique seu email
+    ///check if email is already registered
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log("Email já registrado");
+      console.log("E-mail já registrado");
     }
 
     const newUser = new User({
@@ -44,9 +46,40 @@ app.post("/register", async (req, res) => {
 
     await newUser.save();
 
-    res.status(202).json({ message: "Usuário registrado com sucesso" });
+    res.status(202).json({ message: "Usuário cadastrado com sucesso" });
   } catch (error) {
     console.log("Erro ao registrar o usuário", error);
     res.status(500).json({ message: "Registro falhou" });
+  }
+});
+
+
+const generateSecretKey = () => {
+  const secretKey = crypto.randomBytes(32).toString("hex");
+
+  return secretKey;
+};
+
+const secretKey = generateSecretKey();
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Email inválido" });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Senha inválida" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, secretKey);
+
+    res.status(200).json({ token });
+  } catch (error) {
+    console.log("Falha no login", error);
+    res.status(500).json({ message: "Falha no login" });
   }
 });

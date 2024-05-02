@@ -7,35 +7,56 @@ import {
   TextInput,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken");
+        if (token) {
+          router.replace("/(tabs)/home");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+  const handleLogin = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    axios.post("http://192.168.1.2:3000/login", user).then((response) => {
+      const token = response.data.token;
+      console.log("token",token)
+      AsyncStorage.setItem("authToken", token);
+      router.replace("/(tabs)/home");
+    });
+  };
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: "#736bff", alignItems: "center" }}
     >
-      <Text style={{ marginTop: 80 }}>
-        <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>
+      <View style={{ marginTop: 80 }}>
+        <Text style={{ fontSize: 18, fontWeight: "600", color: "black" }}>
           LISTA DE TAREFAS
         </Text>
-      </Text>
+      </View>
       <KeyboardAvoidingView>
         <View style={{ alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "600",
-              marginTop: 20,
-              color: "black",
-            }}
-          >
-            Acesse com sua conta
+          <Text style={{ fontSize: 16, fontWeight: "600", marginTop: 20, color:"white" }}>
+          Faça login na sua conta
           </Text>
         </View>
 
@@ -47,7 +68,7 @@ const login = () => {
               gap: 5,
               backgroundColor: "white",
               paddingVertical: 5,
-              borderRadius: 10,
+              borderRadius: 5,
               marginTop: 30,
             }}
           >
@@ -77,7 +98,7 @@ const login = () => {
               gap: 5,
               backgroundColor: "white",
               paddingVertical: 5,
-              borderRadius: 10,
+              borderRadius: 5,
               marginTop: 30,
             }}
           >
@@ -92,7 +113,7 @@ const login = () => {
               secureTextEntry={true}
               onChangeText={(text) => setPassword(text)}
               style={{
-                color: "black",
+                color: "gray",
                 marginVertical: 10,
                 width: 300,
                 fontSize: email ? 17 : 17,
@@ -100,6 +121,7 @@ const login = () => {
               placeholder="digite sua senha"
             />
           </View>
+
           <View
             style={{
               flexDirection: "row",
@@ -108,17 +130,19 @@ const login = () => {
               justifyContent: "space-between",
             }}
           >
-            <Text>Mantanha-se conectado</Text>
+            <Text>Mantenha-me conectado</Text>
             <Text style={{ color: "white", fontWeight: "500" }}>
               Esqueci minha senha
             </Text>
           </View>
+
           <View style={{ marginTop: 60 }} />
 
           <Pressable
+            onPress={handleLogin}
             style={{
               width: 200,
-              backgroundColor: "white",
+              backgroundColor: "black",
               padding: 15,
               borderRadius: 6,
               marginLeft: "auto",
@@ -128,7 +152,7 @@ const login = () => {
             <Text
               style={{
                 textAlign: "center",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 fontSize: 16,
               }}
@@ -137,13 +161,15 @@ const login = () => {
             </Text>
           </Pressable>
 
-          <Pressable onPress={() => router.replace("/register")} style={{ marginTop: 15 }}>
-            <Text style={{ textAlign: "center", fontSize: 15, color: "black" }}>
-              Não tem uma conta? Registre-se
+          <Pressable
+            onPress={() => router.replace("/register")}
+            style={{ marginTop: 15 }}
+          >
+            <Text style={{ textAlign: "center", fontSize: 15, color: "white" }}>
+            Não tem uma conta? Inscrever-se
             </Text>
           </Pressable>
         </View>
-        
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
