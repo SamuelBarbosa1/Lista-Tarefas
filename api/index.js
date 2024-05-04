@@ -11,7 +11,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const jtw = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const moment = require("moment");
+
 
 mongoose
   .connect("mongodb+srv://samuel:trav1234@todo-list.t0g5cjx.mongodb.net/")
@@ -32,7 +34,7 @@ app.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    ///check if email is already registered
+    ///Verifique seu email
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       console.log("E-mail já registrado");
@@ -53,7 +55,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
 const generateSecretKey = () => {
   const secretKey = crypto.randomBytes(32).toString("hex");
 
@@ -66,7 +67,7 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({email});
     if (!user) {
       return res.status(401).json({ message: "Email inválido" });
     }

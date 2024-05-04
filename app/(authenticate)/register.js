@@ -26,16 +26,13 @@ const register = () => {
           password:password
       }
 
-      axios.post("http://192.168.1.2:3000/register",user).then((response) => {
-          console.log(response);
-          Alert.alert("Registro realizado com sucesso","Você foi registrado com sucesso");
-          setEmail("");
-          setPassword("");
-          setName("");
-      }).catch((error) => {
-          Alert.alert("Falha no registro","ocorreu um erro durante o registro");
-          console.log("error",error)
-      })
+      axios.post("http://192.168.1.7:3000/register",user).then((response) => {
+        console.log(response);
+        Alert.alert("Registro realizado com sucesso","Você foi registrado com sucesso");
+    }).catch((error) => {
+        Alert.alert("Falha no registro","Ocorreu um erro durante o registro");
+        console.log("falha no registro",error)
+    }); 
   }
   return (
     <SafeAreaView
@@ -100,7 +97,7 @@ const register = () => {
               value={email}
               onChangeText={(text) => setEmail(text)}
               style={{
-                color: "white",
+                color: "black",
                 marginVertical: 10,
                 width: 300,
                 fontSize: email ? 17 : 17,

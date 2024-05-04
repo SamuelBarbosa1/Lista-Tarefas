@@ -6,11 +6,14 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { SlideAnimation } from "react-native-modals";
+import { ModalTitle } from "react-native-modals";
 
 const index = () => {
   const todos = [];
+  const [isModalVisible, setModalVisible] = useState(false);
   return (
     <>
       <View
@@ -102,6 +105,8 @@ const index = () => {
           )}
         </View>
       </ScrollView>
+
+     
     </>
   );
 };
@@ -109,3 +114,5 @@ const index = () => {
 export default index;
 
 const styles = StyleSheet.create({});
+
+//<ScrollView style={{ flex: 1, backgroundColor: "#736bff" }}>

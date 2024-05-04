@@ -14,6 +14,17 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const clearAsyncStorage = async () => {
+  try {
+    await AsyncStorage.clear();
+    console.log('Cache do AsyncStorage limpo com sucesso!');
+  } catch (error) {
+    console.error('Erro ao limpar o cache do AsyncStorage:', error);
+  }
+};
+
+clearAsyncStorage();
+
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +48,7 @@ const login = () => {
       password: password,
     };
 
-    axios.post("http://192.168.1.2:3000/login", user).then((response) => {
+    axios.post("http://192.168.1.7:3000/login", user).then((response) => {
       const token = response.data.token;
       console.log("token",token)
       AsyncStorage.setItem("authToken", token);
